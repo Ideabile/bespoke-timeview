@@ -1,0 +1,24 @@
+<template name="timeItemsOverview" args="">
+  <script>
+   var moment = require('moment'),
+       width = window.innerWidth,
+       wrapPos = function(index){
+           if(index === 0) return 0;
+           var dim = 10, prev = index-1;
+           return moment(data.items[index].date, data.dateFormat).diff(moment(data.items[prev].date, data.dateFormat), 'days')*(dim+index);
+       };
+  </script>
+	<div class="timeline">
+		<div class="events-wrapper">
+			<div class="events" style="width: { width }">
+				<ol>
+					  <li each="item in data.items">
+                <script>var left = wrapPos($index);</script>
+                <a href="#{$index}" data-date="{ item.date }" class="{ item.selected ? 'selected' : '' }" style="left: { left }px">{ item.shortFormat }</a>
+            </li>
+				</ol>
+
+				<span class="filling-line" aria-hidden="true"></span>
+			</div> <!-- .events -->
+		</div> <!-- .events-wrapper -->
+</template>
