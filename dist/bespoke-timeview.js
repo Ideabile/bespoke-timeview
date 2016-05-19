@@ -17,36 +17,35 @@ var currentElement = IncrementalDOM.currentElement
 var text = IncrementalDOM.text
 
 module.exports = (function () {
-var hoisted1 = ["class", "timeline"]
-var hoisted2 = ["class", "events-wrapper"]
-var hoisted3 = ["class", "events"]
-var hoisted4 = ["class", "filling-line", "aria-hidden", "true"]
+var hoisted1 = ["class", "bespoke-timeview--wrapper"]
+var hoisted2 = ["class", "filling-line", "aria-hidden", "true"]
 
 return function timeItemsOverview (data) {
   var moment = _dereq_('moment'),
          width = window.innerWidth,
          wrapPos = function(index){
-             if(index === 0) return 0;
-             var dim = 10, prev = index-1;
-             return moment(data.items[index].date, data.dateFormat).diff(moment(data.items[prev].date, data.dateFormat), 'days')*(dim+index);
-         };
-  elementOpen("div", null, hoisted1)
-    elementOpen("div", null, hoisted2)
-      elementOpen("div", null, hoisted3, "style", "width: " + ( width ) + "")
-        elementOpen("ol")
-          ;(Array.isArray(data.items) ? data.items : Object.keys(data.items)).forEach(function(item, $index) {
-            elementOpen("li", $index)
-              var left = wrapPos($index);
-              elementOpen("a", null, null, "href", "#" + ($index) + "", "data-date",  item.date , "class",  item.selected ? 'selected' : '' , "style", "left: " + ( left ) + "px")
-                text("" + ( item.shortFormat ) + "")
-              elementClose("a")
-            elementClose("li")
-          }, data.items)
-        elementClose("ol")
-        elementOpen("span", null, hoisted4)
-        elementClose("span")
-      elementClose("div")
-    elementClose("div")
+           if(index === 0) return 0;
+           var dim = 10, prev = index-1;
+           return wrapPos(prev) + moment(data.items[index].date, data.dateFormat).diff(moment(data.items[prev].date, data.dateFormat), 'days')*dim;
+
+         },
+         maxSize = wrapPos( data.items.length - 1 ),
+         currentSize = data.activeItem !== false ? wrapPos( data.activeItem ) : 0,
+         currentViewSize = data.slide.querySelector('.bespoke-timeview').offsetWidth || 0,
+         leftWrapper = (currentViewSize/2)-currentSize;
+  elementOpen("div", null, hoisted1, "style", "width: " + ( maxSize ) + "px; left: " + ( leftWrapper ) + "px")
+    elementOpen("span", null, hoisted2, "style", "padding-right: " + ( currentSize ) + "px;")
+    elementClose("span")
+    elementOpen("ol")
+      ;(Array.isArray(data.items) ? data.items : Object.keys(data.items)).forEach(function(item, $index) {
+        elementOpen("li", $index)
+          var left = wrapPos($index);
+          elementOpen("a", null, null, "href", "#" + ($index) + "", "data-date",  item.date , "class",  item.selected ? 'selected' : '' , "style", "left: " + ( left ) + "px")
+            text("" + ( item.shortFormat ) + "")
+          elementClose("a")
+        elementClose("li")
+      }, data.items)
+    elementClose("ol")
   elementClose("div")
 }
 })();
@@ -117,21 +116,24 @@ module.exports = function(options) {
                 status: {
                   prev: (s === slideIndex && timeItemIndex !== 0),
                   next: (s === slideIndex && timeItemIndex-1 !== timeItems.length)
-                }
+                },
+                slide: deck.slides[s],
+                activeItem: (slideIndex === s ) ? timeItemIndex : false
               };
 
           // Means that there is time view items
           if(slide.length > 0){
-            div = deck.slides[s].querySelector('.timeview') || false;
+            div = deck.slides[s].querySelector('.bespoke-timeview') || false;
             if(!div){
               div = document.createElement('div');
-              div.classList.add('timeview');
+              div.classList.add('bespoke-timeview');
               deck.slides[s].insertBefore(div, deck.slides[s].childNodes[0]);
             }
           }
 
           slide.forEach(function(timeItem, b) {
             timeItem.classList.add('bespoke-tv');
+            timeItem.dataset.date = timeItem.dataset.date === 'now' ? moment().format(options.dateFormat) : timeItem.dataset.date;
 
             var _data = Object.assign( {},
                                        timeItem.dataset,
@@ -139,8 +141,10 @@ module.exports = function(options) {
                                          shortFormat: moment(timeItem.dataset.date, options.dateFormat).format('LL')
                                        }
                                      );
-            _items.push(_data);
 
+            _data.selected = (activeSlideIndex === s && activateTimeItemIndex === b );
+
+            _items.push(_data);
             if (s < slideIndex || s === slideIndex && b <= timeItemIndex) {
               timeItem.classList.add('bespoke-tv-active');
               timeItem.classList.remove('bespoke-tv-inactive');

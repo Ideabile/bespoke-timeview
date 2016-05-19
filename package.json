@@ -9,7 +9,7 @@
     "url": "https://github.com/M3kH",
     "email": "mauromandracchia@gmail.com"
   },
-  "main": "./lib/bespoke-timeview.js",
+  "main": "./dist/bespoke-timeview.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/M3kH/bespoke-timeview.git"

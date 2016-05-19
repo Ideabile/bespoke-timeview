@@ -1,24 +1,27 @@
 <template name="timeItemsOverview" args="">
+
   <script>
    var moment = require('moment'),
        width = window.innerWidth,
        wrapPos = function(index){
-           if(index === 0) return 0;
-           var dim = 10, prev = index-1;
-           return moment(data.items[index].date, data.dateFormat).diff(moment(data.items[prev].date, data.dateFormat), 'days')*(dim+index);
-       };
-  </script>
-	<div class="timeline">
-		<div class="events-wrapper">
-			<div class="events" style="width: { width }">
-				<ol>
-					  <li each="item in data.items">
-                <script>var left = wrapPos($index);</script>
-                <a href="#{$index}" data-date="{ item.date }" class="{ item.selected ? 'selected' : '' }" style="left: { left }px">{ item.shortFormat }</a>
-            </li>
-				</ol>
+         if(index === 0) return 0;
+         var dim = 10, prev = index-1;
+         return wrapPos(prev) + moment(data.items[index].date, data.dateFormat).diff(moment(data.items[prev].date, data.dateFormat), 'days')*dim;
 
-				<span class="filling-line" aria-hidden="true"></span>
-			</div> <!-- .events -->
-		</div> <!-- .events-wrapper -->
+       },
+       maxSize = wrapPos( data.items.length - 1 ),
+       currentSize = data.activeItem !== false ? wrapPos( data.activeItem ) : 0,
+       currentViewSize = data.slide.querySelector('.bespoke-timeview').offsetWidth || 0,
+       leftWrapper = (currentViewSize/2)-currentSize;
+  </script>
+
+  <div class="bespoke-timeview--wrapper" style="width: { maxSize }px; left: { leftWrapper }px">
+	    <span class="filling-line" aria-hidden="true" style="padding-right: { currentSize }px;"></span>
+		  <ol>
+			  <li each="item in data.items">
+          <script>var left = wrapPos($index);</script>
+          <a href="#{$index}" data-date="{ item.date }" class="{ item.selected ? 'selected' : '' }" style="left: { left }px">{ item.shortFormat }</a>
+        </li>
+			</ol>
+  </div>
 </template>
