@@ -108,10 +108,12 @@ module.exports = function(options) {
         activeSlideIndex = slideIndex;
         activateTimeItemIndex = timeItemIndex;
 
+        if(timeItems[slideIndex].length === 0) return false;
 
         timeItems.forEach(function(slide, s) {
-          var div,
-              _items = [],
+          if(activeSlideIndex !== s) return false;
+
+          var _items = [],
               obj = {
                 status: {
                   prev: (s === slideIndex && timeItemIndex !== 0),
@@ -160,13 +162,11 @@ module.exports = function(options) {
             }
           });
 
-          if(div){
-            obj.items = _items;
-            obj.dateFormat = options.dateFormat;
-            renderTimeLine(div, obj);
-          }
-
+          obj.items = _items;
+          obj.dateFormat = options.dateFormat;
+          renderTimeLine(div, obj);
         });
+
 
       },
 

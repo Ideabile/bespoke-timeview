@@ -63,6 +63,7 @@
   ],
   "dependencies": {
     "incremental-dom": "^0.4.1",
-    "moment": "^2.13.0"
+    "moment": "^2.13.0",
+    "superviews.js": "^0.4.3"
   }
 }
