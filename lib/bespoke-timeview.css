@@ -73,7 +73,7 @@
     display: block;
     position: absolute;
     top: 50%;
-    background: url("/images/rainbow-line.jpg");
+    background: url("../images/rainbow-line.jpg");
     height: 2px;
     background-repeat: repeat-x;
     z-index: 0;
