@@ -58,10 +58,10 @@ gulp.task('coveralls', ['test'], function() {
 });
 
 gulp.task('compile', ['clean'], function() {
-  return browserify({ standalone: 'bespoke.plugins.timeview' })
+  return browserify()
     .transform(superviewify)
     .add('./lib/bespoke-timeview.js')
-    .bundle()
+    .bundle({ standalone: 'bespoke.plugins.timeview' })
     .pipe(source('bespoke-timeview.js'))
     .pipe(buffer())
     .pipe(header(template([
@@ -75,6 +75,7 @@ gulp.task('compile', ['clean'], function() {
     ].join('\n'), pkg)))
     .pipe(gulp.dest('dist'))
     .pipe(rename('bespoke-timeview.min.js'))
+    .pipe(uglify())
     .pipe(header(template([
       '/*! <%= name %> v<%= version %> ',
       '© <%= new Date().getFullYear() %> <%= author.name %>, ',
