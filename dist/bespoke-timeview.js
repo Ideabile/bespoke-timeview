@@ -1,27 +1,37 @@
-/*!
- * bespoke-timeview v1.0.0
- *
- * Copyright 2016, Mauro Mandracchia
- * This content is released under the MIT license
- * 
- */
+function (obj) {
+obj || (obj = {});
+var __t, __p = '';
+with (obj) {
+__p += '/*!\n * ' +
+((__t = ( name )) == null ? '' : __t) +
+' v' +
+((__t = ( version )) == null ? '' : __t) +
+'\n *\n * Copyright ' +
+((__t = ( new Date().getFullYear() )) == null ? '' : __t) +
+', ' +
+((__t = ( author.name )) == null ? '' : __t) +
+'\n * This content is released under the ' +
+((__t = ( licenses[0].type )) == null ? '' : __t) +
+' license\n * ' +
+((__t = ( licenses[0].url )) == null ? '' : __t) +
+'\n */\n\n';
 
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var n;"undefined"!=typeof window?n=window:"undefined"!=typeof global?n=global:"undefined"!=typeof self&&(n=self);var o=n;o=o.bespoke||(o.bespoke={}),o=o.plugins||(o.plugins={}),o.timeview=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-var IncrementalDOM = _dereq_('incremental-dom')
+}
+return __p
+}(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g=(g.bespoke||(g.bespoke = {}));g=(g.plugins||(g.plugins = {}));g.timeview = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var IncrementalDOM = require('incremental-dom')
 var patch = IncrementalDOM.patch
 var elementOpen = IncrementalDOM.elementOpen
-var elementVoid = IncrementalDOM.elementVoid
 var elementClose = IncrementalDOM.elementClose
 var skip = IncrementalDOM.skip
 var currentElement = IncrementalDOM.currentElement
 var text = IncrementalDOM.text
 
-module.exports = (function () {
 var hoisted1 = ["class", "bespoke-timeview--wrapper"]
 var hoisted2 = ["class", "filling-line", "aria-hidden", "true"]
 
-return function timeItemsOverview (data) {
-  var moment = _dereq_('moment'),
+module.exports = function timeItemsOverview (data) {
+  var moment = require('moment'),
          width = window.innerWidth,
          wrapPos = function(index){
            if(index === 0) return 0;
@@ -33,27 +43,30 @@ return function timeItemsOverview (data) {
          currentSize = data.activeItem !== false ? wrapPos( data.activeItem ) : 0,
          currentViewSize = data.slide.querySelector('.bespoke-timeview').offsetWidth || 0,
          leftWrapper = (currentViewSize/2)-currentSize;
-  elementOpen("div", null, hoisted1, "style", "width: " + ( maxSize ) + "px; left: " + ( leftWrapper ) + "px")
-    elementOpen("span", null, hoisted2, "style", "padding-right: " + ( currentSize ) + "px;")
+  elementOpen("div", "fd3ef9c1-16f2-4e30-9295-3554ca446516", hoisted1, "style", "width: " + ( maxSize ) + "px; left: " + ( leftWrapper ) + "px")
+    elementOpen("span", "1a4ac91d-7632-4b16-9c33-c8ad2d2cc143", hoisted2, "style", "padding-right: " + ( currentSize ) + "px;")
     elementClose("span")
     elementOpen("ol")
-      ;(Array.isArray(data.items) ? data.items : Object.keys(data.items)).forEach(function(item, $index) {
-        elementOpen("li", $index)
-          var left = wrapPos($index);
-          elementOpen("a", null, null, "href", "#" + ($index) + "", "data-date",  item.date , "class",  item.selected ? 'selected' : '' , "style", "left: " + ( left ) + "px")
-            text("" + ( item.shortFormat ) + "")
-          elementClose("a")
-        elementClose("li")
-      }, data.items)
+      if (data.items) {
+        ;(data.items.forEach ? data.items : Object.keys(data.items)).forEach(function($value, $item, $target) {
+          var item = $value
+          var $key = "f3e07841-aac6-45f6-9210-1def6d41837c_" + $item
+          elementOpen("li", $key)
+            var left = wrapPos($index);
+            elementOpen("a", null, null, "href", "#" + ($index) + "", "data-date",  item.date , "class",  item.selected ? 'selected' : '' , "style", "left: " + ( left ) + "px")
+              text("" + ( item.shortFormat ) + "")
+            elementClose("a")
+          elementClose("li")
+        }, data.items)
+      }
     elementClose("ol")
   elementClose("div")
 }
-})();
 
-},{"incremental-dom":3,"moment":4}],2:[function(_dereq_,module,exports){
-var tmplTimeLine = _dereq_('./bespoke-timeview.html'),
-    moment = _dereq_('moment'),
-    patch = _dereq_('incremental-dom').patch,
+},{"incremental-dom":3,"moment":4}],2:[function(require,module,exports){
+var tmplTimeLine = require('./bespoke-timeview.html'),
+    moment = require('moment'),
+    patch = require('incremental-dom').patch,
     renderTimeLine = function(el, data){
       el = el || document.body;
       data = data || {items: [], shortFormat: '', status: {prev: '', next:''}};
@@ -84,6 +97,7 @@ module.exports = function(options) {
 
       next = function() {
         var nextSlideIndex = activeSlideIndex + 1;
+        console.log(activeSlideIndex, activateTimeItemIndex, activeTimeItemByOffset(1));
 
         if (activeTimeItemByOffset(1)) {
           activateTimeItem(activeSlideIndex, activateTimeItemIndex + 1);
@@ -91,6 +105,7 @@ module.exports = function(options) {
         } else if (timeItems[nextSlideIndex]) {
           activateTimeItem(nextSlideIndex, 0);
         }
+        return true;
       },
 
       prev = function() {
@@ -102,6 +117,7 @@ module.exports = function(options) {
         } else if (timeItems[prevSlideIndex]) {
           activateTimeItem(prevSlideIndex, timeItems[prevSlideIndex].length - 1);
         }
+        return true;
       },
 
       activateTimeItem = function(slideIndex, timeItemIndex) {
@@ -186,7 +202,7 @@ module.exports = function(options) {
 
 };
 
-},{"./bespoke-timeview.html":1,"incremental-dom":3,"moment":4}],3:[function(_dereq_,module,exports){
+},{"./bespoke-timeview.html":1,"incremental-dom":3,"moment":4}],3:[function(require,module,exports){
 
 /**
  * @license
@@ -1254,8 +1270,8 @@ exports.applyAttr = applyAttr;
 exports.applyProp = applyProp;
 exports.notifications = notifications;
 
-//# sourceMappingURL=incremental-dom-cjs.js.map
-},{}],4:[function(_dereq_,module,exports){
+
+},{}],4:[function(require,module,exports){
 //! moment.js
 //! version : 2.13.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -1654,7 +1670,7 @@ exports.notifications = notifications;
                 module && module.exports) {
             try {
                 oldLocale = globalLocale._abbr;
-                _dereq_('./locale/' + name);
+                require('./locale/' + name);
                 // because defineLocale currently also sets the global locale, we
                 // want to undo that for lazy loaded locales
                 locale_locales__getSetGlobalLocale(oldLocale);
@@ -5296,6 +5312,5 @@ exports.notifications = notifications;
     return _moment;
 
 }));
-},{}]},{},[2])
-(2)
+},{}]},{},[2])(2)
 });
